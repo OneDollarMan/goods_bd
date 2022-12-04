@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block app_content %}
+<div class="row">
+    <div class="col col-sm-4">
+        <div class="card">
+            <div class="card-header text-bg-primary">
+                Прибыль по месяцам
+            </div>
+            <div class="card-body">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('myChart');
+  fetch('contracts/profit')
+  .then((response) => {
+    return response.json();
+  })
+  .then((data) => {
+    let d1 = [];
+    let d2 = [];
+    data.forEach(el => {
+        d1.push(el[0])
+        d2.push(el[1])
+        });
+    new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: d1,
+      datasets: [{
+        label: 'Прибыль',
+        data: d2,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+  });
+
+
+
+</script>
+{% endblock %}

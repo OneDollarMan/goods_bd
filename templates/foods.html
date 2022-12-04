@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% import 'bootstrap5/form.html' as wtf %}
+
+{% block app_content %}
+<div class="row">
+    <div class="col col-sm-3">
+        {% if session.role == 2 %}
+        <div class="card">
+            <div class="card-header text-bg-primary">
+                Добавить продукт
+            </div>
+            <div class="card-body">
+                {{ wtf.render_form(product_form) }}
+            </div>
+        </div>
+        <br>
+        {% endif %}
+        <div class="card">
+            <div class="card-header text-bg-primary">
+                Приход товара
+            </div>
+            <div class="card-body">
+                {{ wtf.render_form(get_form) }}
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col">
+        <div class="card">
+            <div class="card-header text-bg-primary">
+                Список продуктов
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <th>#</th>
+                        <th>Поставщик</th>
+                        <th>Название</th>
+                        <th>Цена</th>
+                        <th>Количество</th>
+                    </tr>
+                    {% for f in foods %}
+                    <tr class='clickable-row' data-href='{{ url_for("food", id=f[0]) }}'>
+                        <td>{{loop.index}}</td>
+                        <td>{{f[8]}}</td>
+                        <td>{{f[1]}}</td>
+                        <td>{{f[3]}} р</td>
+                        <td>{{f[2]}} {{f[13]}}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

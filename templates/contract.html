@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% import 'bootstrap5/form.html' as wtf %}
+
+{% block app_content %}
+<a href="../contracts">
+    <button class="btn btn-primary"> < Назад</button>
+</a>
+<br><br>
+<div class="row">
+    <div class="col col-sm-4">
+        <div class="card">
+            <div class="card-header text-bg-primary">
+                Информация о контракте
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <td>Номер</td>
+                        <td>{{c[0]}}</td>
+                    </tr>
+                    <tr>
+                        <td>Дата создания</td>
+                        <td>{{c[1]}}</td>
+                    </tr>
+                    <tr>
+                        <td>Заказчик</td>
+                        <td><a href="/customers/{{c[6]}}">{{c[7]}}</a></td>
+                    </tr>
+                    <tr>
+                        <td>Процент удержания</td>
+                        <td>{{c[3]}} %</td>
+                    </tr>
+                    <tr>
+                        <td>Дата доставки</td>
+                        <td>{{c[4]}}</td>
+                    </tr>
+                    <tr>
+                        <td>Статус</td>
+                        <td>{{c[11]}}</td>
+                    </tr>
+                    <tr>
+                        <td>Сумма заказа</td>
+                        <td>{% if sum == None %} 0 {% else %} {{sum}} {%endif %} р</td>
+                    </tr>
+                </table>
+                <a href="/contracts/rm/{{c[0]}}">
+                    <button class="btn btn-danger" name="id" value="{{c[0]}}">Удалить</button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card">
+            <div class="card-header text-bg-primary">
+                Список продуктов
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <td>#</td>
+                        <td>Название</td>
+                        <td>Количество</td>
+                        {% if c[10] == 1 %}
+                        <td>Действия</td>
+                        {% endif %}
+                    </tr>
+                    {% for f in foods %}
+                    <tr class='clickable-row' data-href='/food/{{f[0]}}'>
+                        <td>{{loop.index}}</td>
+                        <td>{{f[4]}} ({{f[11]}})</td>
+                        <td>{{f[2]}} {{f[16]}}</td>
+                        {% if c[10] == 1 %}
+                        <td><a href="/contracts/{{c[0]}}/rm_food/{{f[0]}}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+  <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+</svg></a></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-sm-3">
+        {% if c[10] == 1 %}
+        <div class="card">
+            <div class="card-header text-bg-primary">
+                Добавить продукт
+            </div>
+            <div class="card-body">
+                {{ wtf.render_form(form) }}
+            </div>
+        </div>
+        <br>
+        {% endif %}
+        <div class="card">
+            <div class="card-header text-bg-primary">
+                Изменить статус
+            </div>
+            <div class="card-body">
+                {{ wtf.render_form(status_form, action='/contracts/'+c[0]|string+'/status') }}
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

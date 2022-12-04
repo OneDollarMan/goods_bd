@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block app_content %}
+<a href="../customers">
+    <button class="btn btn-primary"> < Назад</button>
+</a>
+<br><br>
+<div class="row">
+    <div class="col col-sm-4">
+        <div class="card">
+            <div class="card-header text-bg-primary">
+                Информация о заказчике
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <td>Номер</td>
+                        <td>{{c[0]}}</td>
+                    </tr>
+                    <tr>
+                        <td>ФИО</td>
+                        <td>{{c[1]}}</td>
+                    </tr>
+                    <tr>
+                        <td>Телефон</td>
+                        <td>{{c[2]}}</td>
+                    </tr>
+                </table>
+                <a href="/customers/rm/{{c[0]}}">
+                    <button class="btn btn-danger" name="id" value="{{c[0]}}">Удалить</button>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col col-sm-4">
+        <div class="card">
+            <div class="card-header text-bg-primary">
+                Список контрактов
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    {% for s in ss %}
+                    <tr>
+                        <td><a href="/contracts/{{s[0]}}">{{s[4]}}</a></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+
+
+{% endblock %}

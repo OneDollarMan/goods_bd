@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% import 'bootstrap5/form.html' as wtf %}
+
+{% block app_content %}
+<div class="row">
+    <div class="col col-sm-3">
+        {% if session.role >= 1 %}
+        <div class="card">
+            <div class="card-header text-bg-primary">
+                Добавить контракт
+            </div>
+            <div class="card-body">
+                {{ wtf.render_form(form, action='/contracts/add') }}
+            </div>
+        </div>
+        <br>
+        {% endif %}
+        <div class="card">
+            <div class="card-header text-bg-primary">
+                Фильтры
+            </div>
+            <div class="card-body">
+                {{ wtf.render_form(filter_form) }}
+                <br>
+                <a href="/contracts">
+                    <button class="btn btn-danger">
+                        Сбросить
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card">
+            <div class="card-header text-bg-primary">
+                Список контрактов
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <th>#</th>
+                        <th>Дата создания</th>
+                        <th>Заказчик</th>
+                        <th>Процент</th>
+                        <th>Дата доставки</th>
+                        <th>Сумма</th>
+                        <th>Статус</th>
+                    </tr>
+                    {% for c in contracts %}
+                    <tr class='clickable-row' data-href='{{ url_for("contract", id=c[0])}}'>
+                        <td>{{loop.index}}</td>
+                        <td>{{c[1]}}</td>
+                        <td>{{c[9]}}</td>
+                        <td>{{c[3]}} %</td>
+                        <td>{{c[4]}}</td>
+                        <td>{% if c[7] == None %} 0 {% else %} {{c[7]}} {%endif %} р</td>
+                        <td>{{c[13]}}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

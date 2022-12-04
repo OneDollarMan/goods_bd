@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% import 'bootstrap5/form.html' as wtf %}
+
+{% block app_content %}
+<div class="row">
+    {% if session.role == 2 %}
+    <div class="col col-sm-3">
+        <div class="card">
+            <div class="card-header text-bg-primary">
+                Добавить заказчика
+            </div>
+            <div class="card-body">
+                {{ wtf.render_form(form) }}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <div class="col">
+        <div class="card">
+            <div class="card-header text-bg-primary">
+                Список заказчиков
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <th>#</th>
+                        <th>ФИО</th>
+                        <th>Телефон</th>
+                    </tr>
+                    {% for c in cs %}
+                    <tr class='clickable-row' data-href='/customers/{{c[0]}}'>
+                        <td>{{loop.index}}</td>
+                        <td>{{c[1]}}</td>
+                        <td>{{c[2]}}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
