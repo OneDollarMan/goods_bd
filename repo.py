@@ -17,6 +17,7 @@ class Repo:
             self.get_all_users = lambda: self.raw_query("SELECT * FROM user JOIN role ON user.role_id=role.id")
             self.login_user = lambda username, password: self.get_query(
                 "SELECT * FROM user WHERE username='%s' AND password='%s'" % (username, password))
+            self.login_user_safe = lambda username, password: self.get_query("SELECT * FROM user WHERE username=%(u)s AND password=%(p)s", params={'u': username, 'p': password})
             self.add_u = lambda username, password, fio, role: self.write_query(
                 f"INSERT INTO user SET username='{username}', fio='{fio}', password='{password}', role_id='{role}'")
             self.get_all_zero_users = lambda: self.raw_query("SELECT * FROM user WHERE role=0")
@@ -108,9 +109,12 @@ class Repo:
     def select_db(self, db):
         self.cursor.execute(f"USE {db}")
 
-    def raw_query(self, query):
+    def raw_query(self, query, params=None):  # Функция, отправляющая запрос к БД
         if self.cursor and query:
-            self.cursor.execute(query)
+            if params:
+                self.cursor.execute(query, params)
+            else:
+                self.cursor.execute(query)
             return self.cursor.fetchall()
 
     def write_query(self, query):
@@ -119,9 +123,12 @@ class Repo:
             self.connection.commit()
             return self.cursor.fetchall()
 
-    def get_query(self, query):
+    def get_query(self, query, params=None):
         if self.cursor and query:
-            self.cursor.execute(query)
+            if params:
+                self.cursor.execute(query, params)
+            else:
+                self.cursor.execute(query)
             return self.cursor.fetchone()
 
     def get_one_query(self, query):

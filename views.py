@@ -20,7 +20,7 @@ def login():
         return redirect(url_for('index'))
     form = forms.LoginForm()
     if form.validate_on_submit():
-        user = repo.login_user(form.login.data, hashlib.md5(form.password.data.encode('utf-8')).hexdigest())
+        user = repo.login_user_safe(form.login.data, hashlib.md5(form.password.data.encode('utf-8')).hexdigest())
         if user:
             flash('Вы авторизовались!')
             session['loggedin'] = True
@@ -127,7 +127,7 @@ def food_remove(id):
     if session.get('role') >= repo.ROLE_STOREKEEPER:
         if id:
             repo.rm_food(id)
-    return redirect(url_for("food"))
+    return redirect(url_for("foods"))
 
 
 @app.route("/customers", methods=['GET', 'POST'])
